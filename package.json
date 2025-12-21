@@ -4,7 +4,12 @@
   "description": "nothing",
   "author": "ivan azis <ivanazis.id@gmail.com>",
   "license": "MIT",
+  "packageManager": "pnpm@10.26.1",
+  "engines": {
+    "node": ">=22.0.0"
+  },
   "scripts": {
+    "preinstall": "npx only-allow pnpm",
     "commit": "pnpm prepare && pnpm cz",
     "lint": "eslint \"{src,test}/**/*.ts\" --fix",
     "format": "prettier --write .",
