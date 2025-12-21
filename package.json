@@ -10,7 +10,13 @@
     "format": "prettier --write .",
     "start": "nest start",
     "start:dev": "nest start --watch",
-    "prepare": "husky"
+    "prepare": "husky",
+    "typeorm": "node -r ts-node/register -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
+    "db:migration:generate": "wrap () { pnpm typeorm -d src/library/utils/typeorm/typeorm-migrations.datasource.ts migration:generate src/databases/migrations/\"$*\" | cat; }; wrap",
+    "db:migrate": "pnpm typeorm -d src/library/utils/typeorm/typeorm-migrations.datasource.ts migration:run",
+    "db:migrate:revert": "pnpm typeorm migration:revert",
+    "db:seed:create": "wrap () { pnpm typeorm migration:create src/databases/seeds/\"$*\" | cat; }; wrap",
+    "db:seed": "pnpm typeorm -d src/library/utils/typeorm/typeorm-seed.datasource.ts migration:run"
   },
   "dependencies": {
     "@nestjs/common": "^11.1.9",
@@ -18,16 +24,21 @@
     "@nestjs/platform-fastify": "^11.1.9",
     "@nestjs/schematics": "^11.0.9",
     "@nestjs/testing": "^11.1.9",
+    "@nestjs/typeorm": "^11.0.0",
     "@swc/cli": "^0.7.9",
     "@swc/core": "^1.15.7",
+    "bcryptjs": "^3.0.3",
     "dayjs": "^1.11.19",
     "dotenv": "^17.2.3",
     "fastify": "5.6.2",
     "nanoid": "^5.1.6",
+    "pg": "^8.16.3",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.2",
     "source-map-support": "^0.5.21",
-    "ts-loader": "^9.5.4"
+    "ts-loader": "^9.5.4",
+    "typeorm": "0.3.26",
+    "uuid": "^13.0.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^20.2.0",

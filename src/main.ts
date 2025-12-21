@@ -1,5 +1,5 @@
-import { EnvConfig } from '@conf/env';
-EnvConfig.init();
+import { config } from 'dotenv';
+config();
 
 import { NestFactory } from '@nestjs/core';
 import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify';
@@ -12,5 +12,5 @@ void (async () => {
 
   app.enableCors({ origin: true });
 
-  await app.listen({ host: '0.0.0.0', port: EnvConfig.known.SERVER_PORT });
+  await app.listen({ host: '0.0.0.0', port: +(process.env.PORT || 3000) });
 })();

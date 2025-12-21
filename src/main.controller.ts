@@ -1,6 +1,6 @@
 import { Controller, Get } from '@nestjs/common';
-import { ControllerResult } from '@libs/dto';
-import { AppCtxService } from '@libs/app-ctx';
+import { ControllerResult } from '@libs/core/dto';
+import { AppCtxService } from '@libs/core/app-ctx';
 
 @Controller()
 export class MainController {
