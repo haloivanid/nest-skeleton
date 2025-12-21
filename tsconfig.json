@@ -1,0 +1,38 @@
+{
+  "compilerOptions": {
+    // File Layout
+    "rootDir": ".",
+    "outDir": "./dist",
+    "incremental": true,
+
+    // Environment Settings
+    "module": "commonjs",
+    "target": "ES2024",
+    "types": ["node"],
+
+    // Other Outputs
+    "sourceMap": true,
+    "declaration": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "removeComments": true,
+
+    // Style Options
+    "strict": true,
+    "skipLibCheck": true,
+    "strictNullChecks": true,
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitAny": false,
+    "strictBindCallApply": false,
+    "noFallthroughCasesInSwitch": false,
+    "strictPropertyInitialization": false,
+
+    "paths": {
+      "@conf/*": ["./src/configs/*"],
+      "@libs/*": ["./src/library/*"],
+      "@module/*": ["./src/modules/*"],
+      "@db/*": ["./src/databases/*"]
+    }
+  }
+}
