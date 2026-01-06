@@ -1,0 +1,50 @@
+import { Injectable } from '@nestjs/common';
+import { UserEmailValueObject } from '@module/users/domain';
+import { UserEmailEmbed } from '@db/embed';
+import { CryptService } from '@libs/core/providers/crypt';
+
+@Injectable()
+export class UserEmailMapper {
+  constructor(private readonly crypt: CryptService) {}
+
+  fromRawToRepositoryEntity(email: string) {
+    const mask = this.toMask(email);
+    const lookup = this.crypt.toIndexableData(email);
+    const blob = this.crypt.toCipherData(email);
+
+    return { mask, lookup, blob };
+  }
+
+  fromDomainToRepositoryEntity(domain: UserEmailValueObject): UserEmailEmbed {
+    const email = domain.unpack() as string;
+    const mask = this.toMask(email);
+    const lookup = this.crypt.toIndexableData(email);
+    const blob = this.crypt.toCipherData(email);
+
+    return { mask, lookup, blob };
+  }
+
+  fromRepositoryEntityToDomain(embed: UserEmailEmbed): UserEmailValueObject {
+    return UserEmailValueObject.create(this.crypt.fromCipherData(embed.blob));
+  }
+
+  fromDomainToResponse(domain: UserEmailValueObject): string {
+    return this.toMask(domain.unpack() as string);
+  }
+
+  fromUserToResponse(email: string): string {
+    return this.toMask(email);
+  }
+
+  fromRequestToLookup(email: string): string {
+    return this.crypt.toIndexableData(email);
+  }
+
+  private normalize(email: string) {
+    return email.toLowerCase().trim();
+  }
+
+  private toMask(email: string) {
+    return email.replace(/(.)(.*)(@.*)/, '$1*****$3');
+  }
+}

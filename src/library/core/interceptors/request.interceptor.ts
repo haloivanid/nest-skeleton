@@ -1,7 +1,7 @@
 import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { FastifyReply, FastifyRequest } from 'fastify';
-import { AppCtxService } from '@libs/core/app-ctx';
+import { AppCtxService } from '@libs/core/providers/app-ctx';
 import { time } from '@libs/utils';
 
 @Injectable()
@@ -17,6 +17,8 @@ export class RequestInterceptor implements NestInterceptor {
     this.appCtx.setIp(request.ip);
     this.appCtx.setUserAgent(request.headers['user-agent'] as string);
     this.appCtx.setTimestamp(time().unix());
+
+    request.headers['accept-language'] = this.appCtx.context.requestedLang;
 
     response.header('X-Request-Id', request.id);
     response.header('Accept-Language', request.headers['accept-language']);

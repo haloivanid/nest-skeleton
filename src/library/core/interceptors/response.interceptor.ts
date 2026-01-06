@@ -1,16 +1,20 @@
-import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from '@nestjs/common';
+import { CallHandler, ExecutionContext, HttpStatus, Injectable, NestInterceptor } from '@nestjs/common';
 import { map, Observable } from 'rxjs';
 import { ControllerResult, ResponseDto } from '@libs/core/dto';
 import { IllegalControllerResultException } from '@libs/core/exceptions';
 import { IllegalPagingResultException } from '@libs/core/exceptions/illegal-paging-result.exception';
-import { AppCtxService } from '@libs/core/app-ctx';
+import { AppCtxService } from '@libs/core/providers/app-ctx';
+import { FastifyReply } from 'fastify';
 
 @Injectable()
 export class ResponseInterceptor implements NestInterceptor {
   constructor(private readonly appCtx: AppCtxService) {}
 
-  intercept(_: ExecutionContext, next: CallHandler<any>): Observable<any> | Promise<Observable<any>> {
+  intercept(httpCtx: ExecutionContext, next: CallHandler<any>): Observable<any> | Promise<Observable<any>> {
+    const res = httpCtx.switchToHttp().getResponse<FastifyReply>();
     const context = this.appCtx.context;
+
+    res.status(HttpStatus.OK);
 
     return next.handle().pipe(
       map((returnedData) => {

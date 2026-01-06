@@ -1,3 +1,3 @@
-import { nanoid } from 'nanoid';
+import { customAlphabet } from 'nanoid';
 
-export const systemId = () => nanoid();
+export const systemId = () => customAlphabet('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ', 36)();

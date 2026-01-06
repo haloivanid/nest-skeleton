@@ -1,3 +1,8 @@
-import * as dayjs from 'dayjs';
+import time from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
 
-export { dayjs as time };
+time.extend(utc);
+time.extend(timezone);
+
+export { time };

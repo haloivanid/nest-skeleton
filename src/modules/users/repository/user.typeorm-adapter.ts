@@ -9,4 +9,8 @@ export class UserTypeormAdapter extends UserRepository {
   constructor(@InjectRepository(UsersTypeormEntity) private readonly repo: Repository<UsersTypeormEntity>) {
     super(UsersTypeormEntity, repo.manager, repo.queryRunner);
   }
+
+  public async findOneByEmail(email: string): Promise<UsersTypeormEntity | null> {
+    return this.repo.createQueryBuilder('t1').where(`t1.email->>'lookup' = :email`, { email }).getOne();
+  }
 }

@@ -5,3 +5,4 @@ export * from './response/sorting-meta-response.dto';
 export * from './response/meta-response.dto';
 export * from './response/controller-result.dto';
 export * from './general/header.dto';
+export * from './general/jwt-payload.dto';

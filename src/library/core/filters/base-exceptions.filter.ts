@@ -1,6 +1,6 @@
 import { ArgumentsHost, Catch, ExceptionFilter, Injectable } from '@nestjs/common';
 import { BaseException } from '@libs/core/exceptions';
-import { AppCtxService } from '@libs/core/app-ctx/app-ctx.service';
+import { AppCtxService } from '@libs/core/providers/app-ctx/app-ctx.service';
 import { FastifyReply } from 'fastify';
 
 @Catch(BaseException)

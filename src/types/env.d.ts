@@ -8,7 +8,13 @@ declare namespace NodeJS {
     DB_PASSWORD?: string;
     DB_NAME?: string;
     DEFAULT_USER_PASSWORD?: string;
-    PASSWORD_SALT?: string;
     SERVER_PORT?: string;
+    JWT_SECRET: string;
+    SALT_ROUND: string;
+    PII_SECRET: string;
+    PII_ACTIVE: string;
+    HMAC_SECRET: string;
+    MASTER_KEY: string;
+    DERIVE_KEY: string;
   }
 }

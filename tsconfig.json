@@ -15,6 +15,7 @@
     "declaration": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
+    "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "removeComments": true,
 
@@ -34,5 +35,6 @@
       "@module/*": ["./src/modules/*"],
       "@db/*": ["./src/databases/*"]
     }
-  }
+  },
+  "include": ["./src/**/*.ts", "./src/**/*.d.ts"]
 }
