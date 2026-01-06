@@ -44,7 +44,7 @@ export class UserLoginUseCase implements IQueryHandler<UserLoginQuery> {
 
     const user = this.userMapper.fromRepositoryToDomain(userRepoEntity);
     const jwtPayload = new JwtPayloadDto(user.id);
-    accessToken = this.jwtService.sign(jwtPayload.toObject(), { expiresIn: '1h', secret: process.env.JWT_SECRET });
+    accessToken = this.jwtService.sign(jwtPayload.toObject(), { expiresIn: '1h' });
 
     await this.cacheManager.set(sha256, accessToken, 60 * 1000);
     return { accessToken };

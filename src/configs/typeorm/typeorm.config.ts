@@ -1,17 +1,31 @@
 import { DataSourceOptions } from 'typeorm';
 import { join } from 'path';
 import { TypeormNamingStrategy } from '../../library/utils/typeorm/typeorm-naming-strategy';
-import { isStringTruthy } from '@libs/utils';
+import { envSchema } from '../env/env.schema';
 
-export const typeormConfig: DataSourceOptions = {
-  type: 'postgres',
-  host: process.env.DB_HOST || 'localhost',
-  port: +(process.env.DB_PORT || 5432),
-  username: process.env.DB_USERNAME || 'username',
-  password: process.env.DB_PASSWORD || 'password',
-  database: process.env.DB_NAME || 'database',
-  entities: [join(__dirname, '../../databases/entities/**/*.typeorm-entity.{js,ts}')],
-  synchronize: false,
-  logging: isStringTruthy(process.env.DEBUG),
-  namingStrategy: new TypeormNamingStrategy(),
-};
+export function createTypeOrmConfig(env: Record<string, unknown>): DataSourceOptions {
+  const config = envSchema.parse(env);
+
+  return {
+    type: 'postgres',
+    host: config.DB_HOST,
+    port: config.DB_PORT,
+    username: config.DB_USERNAME,
+    password: config.DB_PASSWORD,
+    database: config.DB_NAME,
+    entities: [join(__dirname, '../../databases/entities/**/*.typeorm-entity.{js,ts}')],
+    synchronize: false,
+    logging: config.DEBUG,
+    namingStrategy: new TypeormNamingStrategy(),
+  };
+}
+
+export const typeormConfig = (() => {
+  const parsed = envSchema.safeParse(process.env);
+
+  if (!parsed.success) {
+    throw new Error('TypeORM configuration failed. Please fix the environment variables above.');
+  }
+
+  return createTypeOrmConfig(process.env);
+})();

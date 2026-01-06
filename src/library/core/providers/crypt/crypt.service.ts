@@ -1,15 +1,17 @@
 import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import bcrypt from 'bcryptjs';
 import { createCipheriv, createDecipheriv, createHmac, hkdfSync, randomBytes } from 'node:crypto';
+import { ValidatedEnv } from '@conf/env/env.schema';
 
 @Injectable()
 export class CryptService {
-  private readonly MASTER_KEY: Buffer = Buffer.from(process.env.MASTER_KEY, 'hex');
-  private readonly DERIVE_KEY: Buffer = Buffer.from(process.env.DERIVE_KEY, 'hex');
-  private readonly SALT_ROUND: number = +(process.env.SALT_ROUND || 10);
-  private readonly PII_SECRET: Buffer = Buffer.from(process.env.PII_SECRET, 'hex');
-  private readonly PII_ACTIVE: number = +(process.env.PII_ACTIVE || 2);
-  private readonly HMAC_SECRET: Buffer = Buffer.from(process.env.HMAC_SECRET, 'hex');
+  private readonly MASTER_KEY: Buffer;
+  private readonly DERIVE_KEY: Buffer;
+  private readonly SALT_ROUND: number;
+  private readonly PII_SECRET: Buffer;
+  private readonly PII_ACTIVE: number;
+  private readonly HMAC_SECRET: Buffer;
 
   private readonly IV_LEN = 12;
   private readonly IV_TAG_LEN = 16;
@@ -18,7 +20,14 @@ export class CryptService {
 
   private readonly keyCache = new Map<string, Buffer>();
 
-  constructor() {
+  constructor(private readonly configService: ConfigService<ValidatedEnv, true>) {
+    this.MASTER_KEY = this.configService.get('MASTER_KEY', { infer: true });
+    this.DERIVE_KEY = this.configService.get('DERIVE_KEY', { infer: true });
+    this.SALT_ROUND = this.configService.get('SALT_ROUND', { infer: true });
+    this.PII_SECRET = this.configService.get('PII_SECRET', { infer: true });
+    this.PII_ACTIVE = this.configService.get('PII_ACTIVE', { infer: true });
+    this.HMAC_SECRET = this.configService.get('HMAC_SECRET', { infer: true });
+
     this.validation();
   }
 

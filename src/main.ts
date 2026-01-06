@@ -5,6 +5,8 @@ import { NestFactory } from '@nestjs/core';
 import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify';
 import { MainModule } from './main.module';
 import { fastifyConfig } from '@conf/fastify';
+import { ConfigService } from '@nestjs/config';
+import { ValidatedEnv } from '@conf/env/env.schema';
 
 void (async () => {
   const adapter = new FastifyAdapter(fastifyConfig);
@@ -12,5 +14,9 @@ void (async () => {
 
   app.enableCors({ origin: true });
 
-  await app.listen({ host: '0.0.0.0', port: +(process.env.PORT || 3000) });
+  // Get validated PORT from ConfigService
+  const configService = app.get(ConfigService<ValidatedEnv, true>);
+  const port = configService.get('PORT', { infer: true });
+
+  await app.listen({ host: '0.0.0.0', port });
 })();
