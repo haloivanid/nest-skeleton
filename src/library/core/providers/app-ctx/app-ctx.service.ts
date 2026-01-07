@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Scope } from '@nestjs/common';
 import { RequestedLang } from '@libs/enum';
 
 interface IApplicationContext {
@@ -10,9 +10,9 @@ interface IApplicationContext {
   timestamp: number;
 }
 
-@Injectable()
+@Injectable({ scope: Scope.REQUEST })
 export class AppCtxService {
-  private _context: IApplicationContext = {} as IApplicationContext;
+  private readonly _context: IApplicationContext = {} as IApplicationContext;
 
   public get context(): IApplicationContext {
     return this._context;

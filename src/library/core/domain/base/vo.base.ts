@@ -24,6 +24,6 @@ export abstract class ValueObject<T> {
   }
 
   private isObjectPrimitive<T extends Primitive | Date>(obj: unknown): obj is ObjectPrimitive<T> {
-    return !!Object.prototype.hasOwnProperty.call(obj, 'value');
+    return !!Object.hasOwn(obj as object, 'value');
   }
 }

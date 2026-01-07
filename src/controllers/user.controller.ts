@@ -7,20 +7,32 @@ export class UserController {
   constructor() {}
 
   @Get()
-  getProfile() {}
+  getProfile() {
+    throw new Error('Method not implemented.');
+  }
 
   @Put()
-  updateProfile() {}
+  updateProfile() {
+    throw new Error('Method not implemented.');
+  }
 
   @Post('/request-update')
-  requestUpdate() {}
+  requestUpdate() {
+    throw new Error('Method not implemented.');
+  }
 
   @Post('/change-email/request')
-  requestChangeEmail() {}
+  requestChangeEmail() {
+    throw new Error('Method not implemented.');
+  }
 
   @Patch('/change-email')
-  updateEmail() {}
+  updateEmail() {
+    throw new Error('Method not implemented.');
+  }
 
   @Patch('/change-password')
-  updatePassword() {}
+  updatePassword() {
+    throw new Error('Method not implemented.');
+  }
 }

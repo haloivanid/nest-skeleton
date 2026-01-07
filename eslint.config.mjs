@@ -33,6 +33,7 @@ export default defineConfig([
       '@typescript-eslint/no-unsafe-argument': 'off',
       '@typescript-eslint/unbound-method': 'off',
       'no-console': ['error', { allow: ['warn'] }],
+      'react/react-in-jsx-scope': 'off',
     },
   },
 ]);

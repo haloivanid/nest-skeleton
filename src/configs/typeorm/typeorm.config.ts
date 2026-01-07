@@ -1,5 +1,5 @@
 import { DataSourceOptions } from 'typeorm';
-import { join } from 'path';
+import { join } from 'node:path';
 import { TypeormNamingStrategy } from '../../library/utils/typeorm/typeorm-naming-strategy';
 import { envSchema } from '../env/env.schema';
 

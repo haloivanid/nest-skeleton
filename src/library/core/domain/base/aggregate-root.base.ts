@@ -14,7 +14,7 @@ import { time } from '@libs/utils';
  */
 export abstract class AggregateRoot {
   protected readonly logger = new Logger(this.constructor.name);
-  private _events: Map<string, DomainEvent> = new Map();
+  private readonly _events: Map<string, DomainEvent> = new Map();
   private publishStatus: boolean = false;
 
   protected abstract _id: string;

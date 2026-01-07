@@ -22,14 +22,14 @@ export const envSchema = z.object({
   PORT: z
     .string()
     .default('3000')
-    .transform((val) => parseInt(val, 10))
+    .transform((val) => +(val || 3000))
     .pipe(z.number().int().positive().max(65535)),
 
   DB_HOST: z.string().min(1, 'DB_HOST is required'),
   DB_PORT: z
     .string()
     .default('5432')
-    .transform((val) => parseInt(val, 10))
+    .transform((val) => +(val || 5432))
     .pipe(z.number().int().positive().max(65535)),
   DB_USERNAME: z.string().min(1, 'DB_USERNAME is required'),
   DB_PASSWORD: z.string().min(1, 'DB_PASSWORD is required'),
@@ -43,12 +43,12 @@ export const envSchema = z.object({
   SALT_ROUND: z
     .string()
     .default('10')
-    .transform((val) => parseInt(val, 10))
+    .transform((val) => +(val || 10))
     .pipe(z.number().int().min(10, 'SALT_ROUND must be >= 10 for security')),
   PII_ACTIVE: z
     .string()
     .default('2')
-    .transform((val) => parseInt(val, 10))
+    .transform((val) => +(val || 2))
     .pipe(z.number().int().min(1).max(255, 'PII_ACTIVE must be between 1 and 255')),
 
   DEBUG: z

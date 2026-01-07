@@ -45,6 +45,10 @@ export class UserEmailMapper {
   }
 
   private toMask(email: string) {
-    return email.replace(/(.)(.*)(@.*)/, '$1*****$3');
+    const atIndex = email.lastIndexOf('@');
+    if (atIndex < 1) {
+      return email;
+    }
+    return email.substring(0, 1) + '*****' + email.substring(atIndex);
   }
 }
