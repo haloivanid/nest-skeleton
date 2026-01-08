@@ -3,7 +3,6 @@ import { MultiLang } from '@libs/types';
 import { ResponseDto } from '@libs/core/dto';
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { systemId } from '@libs/utils/uid';
-import { AppCtxService } from '../providers/app-ctx/app-ctx.service';
 
 /**
  * Exception filter for handling 404 Not Found exceptions.
@@ -14,8 +13,6 @@ import { AppCtxService } from '../providers/app-ctx/app-ctx.service';
 @Catch(NotFoundException)
 @Injectable()
 export class NotFoundExceptionFilter implements ExceptionFilter {
-  constructor(private readonly appCtx: AppCtxService) {}
-
   catch(_: NotFoundException, host: ArgumentsHost): void {
     const http = host.switchToHttp();
     const request = http.getRequest<FastifyRequest>();
@@ -44,6 +41,5 @@ export class NotFoundExceptionFilter implements ExceptionFilter {
     };
 
     res.status(httpStatusCode).send(response);
-    this.appCtx.reset();
   }
 }

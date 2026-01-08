@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { RequestedLang } from '@libs/enum';
+import { AsyncLocalStorage } from 'node:async_hooks';
 
-class IApplicationContext {
+export class IApplicationContext {
   requestId: string;
   requestedLang: RequestedLang;
   actorId: string;
@@ -12,39 +13,51 @@ class IApplicationContext {
 
 @Injectable()
 export class AppCtxService {
-  private _context: IApplicationContext = new IApplicationContext();
+  private readonly als = new AsyncLocalStorage<IApplicationContext>();
+
+  run(fn: () => void) {
+    const store = new IApplicationContext();
+    this.als.run(store, fn);
+  }
 
   public get context(): IApplicationContext {
-    return this._context;
+    const store = this.als.getStore();
+    if (!store) {
+      // Return empty/default if accessed outside of a request context (e.g. background jobs, tests without mock)
+      // or optionally throw an error. For safety, returning a clean object or logging a warning is often better.
+      // Given the previous implementation returned a default object, we'll try to match that safety or just return empty partial.
+      return {} as IApplicationContext;
+    }
+    return store;
   }
 
   setRequestId(requestId: string) {
-    this._context.requestId = requestId;
+    const store = this.context;
+    store.requestId = requestId;
   }
 
   setRequestedLang(lang?: string) {
-    this._context.requestedLang = lang
-      ? RequestedLang[lang.toUpperCase() as keyof typeof RequestedLang]
-      : RequestedLang.EN;
+    const store = this.context;
+    store.requestedLang = lang ? RequestedLang[lang.toUpperCase() as keyof typeof RequestedLang] : RequestedLang.EN;
   }
 
   setActorId(actorId: string) {
-    this._context.actorId = actorId;
+    const store = this.context;
+    store.actorId = actorId;
   }
 
   setIp(ip: string) {
-    this._context.ip = ip;
+    const store = this.context;
+    store.ip = ip;
   }
 
   setUserAgent(userAgent: string) {
-    this._context.userAgent = userAgent;
+    const store = this.context;
+    store.userAgent = userAgent;
   }
 
   setTimestamp(unixTime: number) {
-    this._context.timestamp = unixTime;
-  }
-
-  reset() {
-    this._context = {} as IApplicationContext;
+    const store = this.context;
+    store.timestamp = unixTime;
   }
 }
