@@ -5,12 +5,11 @@ import { entityId } from '@libs/utils/uid';
 import { UserRepository } from '@module/users/repository';
 import { UsersTypeormEntity } from '@db/entities/users.typeorm-entity';
 import { UserEmailMapper, UserMapper } from '@module/users/mapper';
-import { UserResponseDto } from '@module/users/dto/responses/user-response.dto';
 import { UnauthorizedException } from '@nestjs/common';
 import { CryptService } from '@libs/core/providers/crypt';
 
 @CommandHandler(CreateUserCommand)
-export class CreateUserUseCase implements ICommandHandler<CreateUserCommand, UserResponseDto> {
+export class CreateUserUseCase implements ICommandHandler<CreateUserCommand> {
   constructor(
     private readonly userRepository: UserRepository,
     private readonly userMapper: UserMapper,

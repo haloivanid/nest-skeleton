@@ -22,4 +22,11 @@ export class User extends Entity<UserEntityFields, UserEntityCreationPayload> {
     entity.logger.debug(JSON.stringify({ state: 'ENTITY_CREATION', payload: entity.toObject() }));
     return entity;
   }
+
+  async validatePassword(
+    candidate: string,
+    comparator: (raw: string, hash: string) => boolean | Promise<boolean>,
+  ): Promise<boolean> {
+    return comparator(candidate, this._fields.password);
+  }
 }

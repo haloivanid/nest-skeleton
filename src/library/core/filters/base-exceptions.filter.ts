@@ -15,5 +15,7 @@ export class BaseExceptionFilter implements ExceptionFilter {
 
     data.requestId = context.requestId;
     host.switchToHttp().getResponse<FastifyReply>().status(httpStatusNumber).send(data);
+
+    this.appCtx.reset();
   }
 }

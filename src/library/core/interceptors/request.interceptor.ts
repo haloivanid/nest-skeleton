@@ -1,7 +1,7 @@
 import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { FastifyReply, FastifyRequest } from 'fastify';
-import { AppCtxService } from '@libs/core/providers/app-ctx';
+import { AppCtxService } from '../providers/app-ctx/app-ctx.service';
 import { time } from '@libs/utils';
 
 @Injectable()

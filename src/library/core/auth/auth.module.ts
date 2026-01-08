@@ -13,7 +13,7 @@ import { ValidatedEnv } from '@conf/env/env.schema';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService<ValidatedEnv, true>) => ({
-        secret: configService.get('JWT_SECRET', { infer: true }),
+        secret: configService.get<string>('JWT_SECRET', { infer: true }),
         signOptions: { expiresIn: '1h' },
       }),
     }),
@@ -21,6 +21,6 @@ import { ValidatedEnv } from '@conf/env/env.schema';
     CryptModule.register(),
   ],
   providers: [JwtStrategy, UserMapper, UserEmailMapper],
-  exports: [JwtStrategy],
+  exports: [JwtStrategy, JwtModule],
 })
 export class AuthModule {}

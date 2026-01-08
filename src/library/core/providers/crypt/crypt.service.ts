@@ -39,7 +39,7 @@ export class CryptService {
     return bcrypt.compare(password, salted);
   }
 
-  toIndexableData(value: string) {
+  toLookupData(value: string) {
     if (value.length > this.MAX_INPUT_LENGTH) {
       throw new Error('Input exceeds maximum allowed length');
     }
@@ -72,20 +72,16 @@ export class CryptService {
       throw new Error('Invalid cipher data');
     }
 
-    try {
-      const level = cipherBuffer.readUint8(0);
-      const iv = cipherBuffer.subarray(1, 1 + this.IV_LEN);
-      const tag = cipherBuffer.subarray(1 + this.IV_LEN, 1 + this.IV_LEN + this.IV_TAG_LEN);
-      const encrypted = cipherBuffer.subarray(1 + this.IV_LEN + this.IV_TAG_LEN);
+    const level = cipherBuffer.readUint8(0);
+    const iv = cipherBuffer.subarray(1, 1 + this.IV_LEN);
+    const tag = cipherBuffer.subarray(1 + this.IV_LEN, 1 + this.IV_LEN + this.IV_TAG_LEN);
+    const encrypted = cipherBuffer.subarray(1 + this.IV_LEN + this.IV_TAG_LEN);
 
-      const key = this.getPiiKey(level);
-      const decipher = createDecipheriv(this.IV_ALG, key, iv, { authTagLength: this.IV_TAG_LEN });
-      decipher.setAuthTag(tag);
+    const key = this.getPiiKey(level);
+    const decipher = createDecipheriv(this.IV_ALG, key, iv, { authTagLength: this.IV_TAG_LEN });
+    decipher.setAuthTag(tag);
 
-      return Buffer.concat([decipher.update(encrypted), decipher.final()]).toString('utf8');
-    } catch (_error) {
-      throw new Error('Failed to decrypt data');
-    }
+    return Buffer.concat([decipher.update(encrypted), decipher.final()]).toString('utf8');
   }
 
   private derive32(value: Buffer) {
@@ -147,7 +143,7 @@ export class CryptService {
   }
 
   private validateHexBuffer(buffer: Buffer, name: string) {
-    if (buffer.length === 0 || buffer.every((byte) => byte === 0)) {
+    if (buffer.every((byte) => byte === 0)) {
       throw new Error(`${name} appears to be invalid hex`);
     }
   }

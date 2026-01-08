@@ -9,7 +9,7 @@ export class UserEmailMapper {
 
   fromRawToRepositoryEntity(email: string) {
     const mask = this.toMask(email);
-    const lookup = this.crypt.toIndexableData(email);
+    const lookup = this.crypt.toLookupData(email);
     const blob = this.crypt.toCipherData(email);
 
     return { mask, lookup, blob };
@@ -18,7 +18,7 @@ export class UserEmailMapper {
   fromDomainToRepositoryEntity(domain: UserEmailValueObject): UserEmailEmbed {
     const email = domain.unpack() as string;
     const mask = this.toMask(email);
-    const lookup = this.crypt.toIndexableData(email);
+    const lookup = this.crypt.toLookupData(email);
     const blob = this.crypt.toCipherData(email);
 
     return { mask, lookup, blob };
@@ -37,11 +37,7 @@ export class UserEmailMapper {
   }
 
   fromRequestToLookup(email: string): string {
-    return this.crypt.toIndexableData(email);
-  }
-
-  private normalize(email: string) {
-    return email.toLowerCase().trim();
+    return this.crypt.toLookupData(email);
   }
 
   private toMask(email: string) {

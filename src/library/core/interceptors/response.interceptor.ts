@@ -1,5 +1,5 @@
 import { CallHandler, ExecutionContext, HttpStatus, Injectable, NestInterceptor } from '@nestjs/common';
-import { map, Observable } from 'rxjs';
+import { finalize, map, Observable } from 'rxjs';
 import { ControllerResult, ResponseDto } from '@libs/core/dto';
 import { IllegalControllerResultException } from '@libs/core/exceptions';
 import { IllegalPagingResultException } from '@libs/core/exceptions/illegal-paging-result.exception';
@@ -34,6 +34,9 @@ export class ResponseInterceptor implements NestInterceptor {
         responseDto.error = null;
 
         return responseDto;
+      }),
+      finalize(() => {
+        this.appCtx.reset();
       }),
     );
   }
