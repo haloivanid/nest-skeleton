@@ -4,12 +4,14 @@ import globals from 'globals';
 import tsEslint from 'typescript-eslint';
 import { defineConfig } from 'eslint/config';
 import prettier from 'eslint-config-prettier';
+import pluginReact from 'eslint-plugin-react';
 
 export default defineConfig([
   { ignores: ['eslint.config.mjs'] },
   ...tsEslint.configs.recommendedTypeChecked,
   prettier,
   { files: ['**/*.{js,mjs,cjs}'], plugins: { js }, extends: ['js/recommended'] },
+  { files: ['**/*.{jsx,tsx}'], ...pluginReact.configs.flat.recommended },
   {
     languageOptions: {
       globals: { ...globals.node, ...globals.jest },
@@ -18,7 +20,7 @@ export default defineConfig([
     },
   },
   {
-    files: ['**/*.ts'],
+    files: ['**/*.ts', '**/*.tsx'],
     rules: {
       '@typescript-eslint/no-unused-vars': [
         'error',
