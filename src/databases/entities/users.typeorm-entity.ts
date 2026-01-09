@@ -1,8 +1,10 @@
 import { Column, CreateDateColumn, Entity, Index, PrimaryColumn, UpdateDateColumn } from 'typeorm';
 import { BaseTypeormEntity } from '@db/base';
-import { UserEmailEmbed } from '@db/embed/user-email.embed';
+import { EmailEmbed } from '@db/embed/email.embed';
 
 @Entity()
+@Index(['email.lookup'], { unique: true })
+@Index(['deletedAt'], { where: 'deleted_at IS NOT NULL' })
 export class UsersTypeormEntity extends BaseTypeormEntity {
   readonly sortable: (keyof this)[] = ['name', 'createdAt'];
 
@@ -13,11 +15,11 @@ export class UsersTypeormEntity extends BaseTypeormEntity {
   @Column({ type: 'varchar', length: 255, nullable: false })
   name: string;
 
-  @Column({ type: 'jsonb', nullable: false })
-  email: UserEmailEmbed;
-
   @Column({ type: 'varchar', length: 255, nullable: false })
   password: string;
+
+  @Column(() => EmailEmbed, { prefix: 'email_' })
+  email: EmailEmbed;
 
   @CreateDateColumn()
   createdAt: Date;
@@ -25,7 +27,6 @@ export class UsersTypeormEntity extends BaseTypeormEntity {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @Index({ nullFiltered: true })
   @Column({ type: 'timestamp', nullable: true })
   deletedAt: Date | null;
 }

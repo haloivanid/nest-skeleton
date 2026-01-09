@@ -4,9 +4,9 @@ import { UserEmailMapper, UserMapper } from '@module/users/mapper';
 import { Inject, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { CACHE_MANAGER, Cache } from '@nestjs/cache-manager';
-import { JwtPayloadDto } from '@libs/core/dto';
 import { CryptService } from '@libs/core/providers/crypt';
 import { UserLoginQuery, UserPasswordAttemptQuery } from '@module/users/services/query';
+import { UserAuthStrategyDto } from '@libs/core/auth/startegy/user/user.auth-strategy.dto';
 
 @QueryHandler(UserLoginQuery)
 export class UserLoginUseCase implements IQueryHandler<UserLoginQuery> {
@@ -26,25 +26,25 @@ export class UserLoginUseCase implements IQueryHandler<UserLoginQuery> {
     const key = this.generateCacheKey(query.dto.email);
     let accessToken = await this.cacheManager.get<string>(key);
     if (accessToken) {
-      return { accessToken };
+      return { accessToken, cached: true };
     }
 
     const emailLookup = this.userEmailMapper.fromRequestToLookup(query.dto.email);
     const userRepoEntity = await this.userRepo.findOneByEmail(emailLookup);
-    if (!userRepoEntity) {
+    if (!userRepoEntity || userRepoEntity.deletedAt) {
       throw new UnauthorizedException('User not found');
     }
 
     const user = this.userMapper.fromRepositoryToDomain(userRepoEntity);
     await this.queryBus.execute(new UserPasswordAttemptQuery(query.dto.password, user));
 
-    accessToken = this.jwtService.sign(new JwtPayloadDto(user.id).toObject());
+    accessToken = this.jwtService.sign<UserAuthStrategyDto>({ id: user.id });
     await this.cacheManager.set(key, accessToken, 60 * 1000);
 
-    return { accessToken };
+    return { accessToken, cached: false };
   }
 
   private generateCacheKey(info: string): string {
-    return this.cryptService.toLookupData(`${this.CACHE_KEY_PREFIX}:${info}`);
+    return this.cryptService.toLookupData(`${this.CACHE_KEY_PREFIX}:${info}`).toString('hex');
   }
 }

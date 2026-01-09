@@ -19,7 +19,7 @@ export class User extends Entity<UserEntityFields, UserEntityCreationPayload> {
 
   static create(user: UserEntityCreationPayload) {
     const entity = new User(user);
-    entity.logger.debug(JSON.stringify({ state: 'ENTITY_CREATION', payload: entity.toObject() }));
+    entity.logger.debug(JSON.stringify({ state: 'ENTITY_CREATION', payload: { id: entity.id } }));
     return entity;
   }
 

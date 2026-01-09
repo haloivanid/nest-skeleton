@@ -1,2 +1,2 @@
 export * from './auth.module';
-export * from './startegy/jwt.strategy';
+export * from './startegy/user/user.auth-strategy';

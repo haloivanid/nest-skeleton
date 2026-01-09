@@ -70,7 +70,7 @@ void (async () => {
 ```typescript
 @Module({
   imports: [
-    AppCtxModule.register(),
+    AppCtxModule.register(), // Global request context
     TypeOrmModule.forRoot(typeormConfig),
     CqrsModule.forRoot(),
     AuthModule,

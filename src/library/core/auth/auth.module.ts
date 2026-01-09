@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { JwtStrategy } from '@libs/core/auth/startegy/jwt.strategy';
+import { UserAuthStrategy } from '@libs/core/auth/startegy/user';
 import { JwtModule } from '@nestjs/jwt';
 import { UserRepositoryModule } from '@module/users/repository';
 import { UserEmailMapper, UserMapper } from '@module/users/mapper';
 import { CryptModule } from '@libs/core/providers/crypt';
-import { ValidatedEnv } from '@conf/env/env.schema';
+import { ValidatedEnv } from '@conf/env';
 
 @Module({
   imports: [
@@ -15,12 +15,13 @@ import { ValidatedEnv } from '@conf/env/env.schema';
       useFactory: (configService: ConfigService<ValidatedEnv, true>) => ({
         secret: configService.get<string>('JWT_SECRET', { infer: true }),
         signOptions: { expiresIn: '1h' },
+        verifyOptions: { algorithms: ['HS256'] },
       }),
     }),
     UserRepositoryModule,
     CryptModule.register(),
   ],
-  providers: [JwtStrategy, UserMapper, UserEmailMapper],
-  exports: [JwtStrategy, JwtModule],
+  providers: [UserAuthStrategy, UserMapper, UserEmailMapper],
+  exports: [UserAuthStrategy, JwtModule],
 })
 export class AuthModule {}

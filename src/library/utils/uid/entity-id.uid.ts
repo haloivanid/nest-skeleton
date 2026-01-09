@@ -1,3 +1,1 @@
-import { v4 as entityId } from 'uuid';
-
-export { entityId };
+export { v7 as entityId } from 'uuid';

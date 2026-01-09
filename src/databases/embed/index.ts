@@ -1,1 +1,1 @@
-export * from './user-email.embed';
+export * from './email.embed';

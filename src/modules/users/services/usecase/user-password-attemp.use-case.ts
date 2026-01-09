@@ -43,6 +43,6 @@ export class UserPasswordAttemptUseCase {
   }
 
   private generateKey(info: string): string {
-    return this.crypt.toLookupData(`${this.CACHE_KEY_PREFIX}:${info}`);
+    return this.crypt.toLookupData(`${this.CACHE_KEY_PREFIX}:${info}`).toString('hex');
   }
 }

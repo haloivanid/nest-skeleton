@@ -185,6 +185,7 @@ curl -X POST http://localhost:3000/users/login \
 ## Learn More
 
 - **Architecture**: [docs/architecture/overview.md](docs/architecture/overview.md)
+- **App Context**: [docs/architecture/app-context.md](docs/architecture/app-context.md)
 - **CQRS Pattern**: [docs/guides/cqrs-pattern.md](docs/guides/cqrs-pattern.md)
 - **All Documentation**: [docs/README.md](docs/README.md)
 

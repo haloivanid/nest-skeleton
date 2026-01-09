@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { UserEmailValueObject } from '@module/users/domain';
-import { UserEmailEmbed } from '@db/embed';
+import { EmailEmbed } from '@db/embed';
 import { CryptService } from '@libs/core/providers/crypt';
 
 @Injectable()
@@ -15,7 +15,7 @@ export class UserEmailMapper {
     return { mask, lookup, blob };
   }
 
-  fromDomainToRepositoryEntity(domain: UserEmailValueObject): UserEmailEmbed {
+  fromDomainToRepositoryEntity(domain: UserEmailValueObject): EmailEmbed {
     const email = domain.unpack() as string;
     const mask = this.toMask(email);
     const lookup = this.crypt.toLookupData(email);
@@ -24,7 +24,7 @@ export class UserEmailMapper {
     return { mask, lookup, blob };
   }
 
-  fromRepositoryEntityToDomain(embed: UserEmailEmbed): UserEmailValueObject {
+  fromRepositoryEntityToDomain(embed: EmailEmbed): UserEmailValueObject {
     return UserEmailValueObject.create(this.crypt.fromCipherData(embed.blob));
   }
 
@@ -36,7 +36,7 @@ export class UserEmailMapper {
     return this.toMask(email);
   }
 
-  fromRequestToLookup(email: string): string {
+  fromRequestToLookup(email: string): Buffer {
     return this.crypt.toLookupData(email);
   }
 

@@ -1,14 +1,16 @@
+import { ControllerResult } from '@libs/core/dto';
+import { AppCtxService } from '@libs/core/providers/app-ctx';
 import { Controller, Get, Patch, Post, Put, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 
 @Controller('/me')
-@UseGuards(AuthGuard('jwt'))
+@UseGuards(AuthGuard('user'))
 export class UserController {
-  constructor() {}
+  constructor(private readonly appCtx: AppCtxService) {}
 
   @Get()
   getProfile() {
-    throw new Error('Method not implemented.');
+    return ControllerResult.builder({ content: this.appCtx.context.userAgent });
   }
 
   @Put()

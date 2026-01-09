@@ -1,4 +1,4 @@
-import { CallHandler, ExecutionContext, HttpStatus, Injectable, NestInterceptor } from '@nestjs/common';
+import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from '@nestjs/common';
 import { map, Observable } from 'rxjs';
 import { ControllerResult, ResponseDto } from '@libs/core/dto';
 import { IllegalControllerResultException } from '@libs/core/exceptions';
@@ -11,10 +11,8 @@ export class ResponseInterceptor implements NestInterceptor {
   constructor(private readonly appCtx: AppCtxService) {}
 
   intercept(httpCtx: ExecutionContext, next: CallHandler<any>): Observable<any> | Promise<Observable<any>> {
-    const res = httpCtx.switchToHttp().getResponse<FastifyReply>();
     const context = this.appCtx.context;
-
-    res.status(HttpStatus.OK);
+    const response = httpCtx.switchToHttp().getResponse<FastifyReply>();
 
     return next.handle().pipe(
       map((returnedData) => {
@@ -32,6 +30,8 @@ export class ResponseInterceptor implements NestInterceptor {
         responseDto.data = returnedData.data;
         responseDto.meta = returnedData.meta;
         responseDto.error = null;
+
+        response.status(returnedData.httpStatus);
 
         return responseDto;
       }),

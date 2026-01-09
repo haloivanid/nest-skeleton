@@ -1,7 +1,7 @@
 import { FastifyHttpOptions } from 'fastify';
 import { Logger } from '@nestjs/common';
 import { systemId } from '@libs/utils/uid';
-const log = new Logger('FastifyAdapter');
+const logger = new Logger('FastifyAdapter');
 
 export const fastifyConfig: FastifyHttpOptions<any> = {
   trustProxy: true,
@@ -9,7 +9,7 @@ export const fastifyConfig: FastifyHttpOptions<any> = {
   logger: {
     stream: {
       write(msg: string) {
-        return log.debug(msg.trim());
+        return logger.log(msg.trim());
       },
     },
   },

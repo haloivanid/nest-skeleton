@@ -39,17 +39,17 @@ export class CryptService {
     return bcrypt.compare(password, salted);
   }
 
-  toLookupData(value: string) {
+  toLookupData(value: string): Buffer {
     if (value.length > this.MAX_INPUT_LENGTH) {
       throw new Error('Input exceeds maximum allowed length');
     }
 
     value = value.trim().toLowerCase();
 
-    return createHmac('sha256', this.getHmacKey()).update(value).digest('hex');
+    return createHmac('sha256', this.getHmacKey()).update(value).digest();
   }
 
-  toCipherData(value: string) {
+  toCipherData(value: string): Buffer {
     if (value.length > this.MAX_INPUT_LENGTH) {
       throw new Error('Input exceeds maximum allowed length');
     }
@@ -62,20 +62,19 @@ export class CryptService {
     const tag = cipher.getAuthTag();
     const level = Buffer.from([+this.PII_ACTIVE & 0xff]);
 
-    return Buffer.concat([level, iv, tag, encrypted]).toString('base64');
+    return Buffer.concat([level, iv, tag, encrypted]);
   }
 
-  fromCipherData(cipher: string) {
+  fromCipherData(cipher: Buffer): string {
     const minLength = 1 + this.IV_LEN + this.IV_TAG_LEN;
-    const cipherBuffer = Buffer.from(cipher, 'base64');
-    if (cipherBuffer.length < minLength) {
+    if (cipher.length < minLength) {
       throw new Error('Invalid cipher data');
     }
 
-    const level = cipherBuffer.readUint8(0);
-    const iv = cipherBuffer.subarray(1, 1 + this.IV_LEN);
-    const tag = cipherBuffer.subarray(1 + this.IV_LEN, 1 + this.IV_LEN + this.IV_TAG_LEN);
-    const encrypted = cipherBuffer.subarray(1 + this.IV_LEN + this.IV_TAG_LEN);
+    const level = cipher.readUint8(0);
+    const iv = cipher.subarray(1, 1 + this.IV_LEN);
+    const tag = cipher.subarray(1 + this.IV_LEN, 1 + this.IV_LEN + this.IV_TAG_LEN);
+    const encrypted = cipher.subarray(1 + this.IV_LEN + this.IV_TAG_LEN);
 
     const key = this.getPiiKey(level);
     const decipher = createDecipheriv(this.IV_ALG, key, iv, { authTagLength: this.IV_TAG_LEN });

@@ -275,8 +275,8 @@ export class UserLoginUseCase implements IQueryHandler<UserLoginQuery, UserLogin
     }
 
     // 3. Generate JWT token
-    const payload = { sub: user.id, email: user.email.email };
-    const token = await this.jwtService.signAsync(payload);
+    const payload = { id: user.id };
+    const token = this.jwtService.sign(payload);
 
     // 4. Return response
     return { token, user: { id: user.id, name: user.name, email: user.email.email } };
