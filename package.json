@@ -18,9 +18,9 @@
     "start:dev": "nest start --watch",
     "prepare": "husky",
     "typeorm": "node -r ts-node/register -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
-    "db:migration:generate": "wrap () { pnpm typeorm -d src/library/utils/typeorm/typeorm-migrations.datasource.ts migration:generate src/databases/migrations/\"$*\" | cat; }; wrap",
-    "db:migrate": "pnpm typeorm -d src/library/utils/typeorm/typeorm-migrations.datasource.ts migration:run",
-    "db:migrate:revert": "pnpm typeorm -d src/library/utils/typeorm/typeorm-migrations.datasource.ts migration:revert",
+    "db:migration:generate": "wrap () { pnpm typeorm -d src/library/external/typeorm/typeorm-migrations.datasource.ts migration:generate src/databases/migrations/\"$*\" | cat; }; wrap",
+    "db:migrate": "pnpm typeorm -d src/library/external/typeorm/typeorm-migrations.datasource.ts migration:run",
+    "db:migrate:revert": "pnpm typeorm -d src/library/external/typeorm/typeorm-migrations.datasource.ts migration:revert",
     "db:seed:create": "wrap () { pnpm typeorm migration:create src/databases/migrations/\"seed-$*\" | cat; }; wrap"
   },
   "dependencies": {

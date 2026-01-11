@@ -15,7 +15,11 @@ export function isStringTruthy(value?: string): boolean {
   const strValue = String(value).toLowerCase().trim();
 
   const num = Number(strValue);
-  if (!isNaN(num)) return num > 0;
+  if (!Number.isNaN(num)) return num > 0;
 
   return ['y', 'yes', 'true', 'ok'].includes(strValue);
+}
+
+export function toTitleCase(str: string): string {
+  return str.trim().replaceAll(/\b\w/g, (match) => match.toUpperCase());
 }

@@ -56,6 +56,15 @@ export const envSchema = z.object({
     .optional()
     .default('false')
     .transform((val) => isStringTruthy(val)),
+
+  SMTP_HOST: z.string().min(1, 'SMTP_HOST is required'),
+  SMTP_PORT: z
+    .string()
+    .default('2525')
+    .transform((val) => +(val || 2525))
+    .pipe(z.number().int().positive().max(65535)),
+  SMTP_USER: z.string().min(1, 'SMTP_USERNAME is required'),
+  SMTP_PASS: z.string().min(1, 'SMTP_PASSWORD is required'),
 });
 
 export type EnvSchema = z.infer<typeof envSchema>;
@@ -76,4 +85,8 @@ export type ValidatedEnv = {
   SALT_ROUND: number;
   PII_ACTIVE: number;
   DEBUG: boolean;
+  SMTP_HOST: string;
+  SMTP_PORT: number;
+  SMTP_USER: string;
+  SMTP_PASS: string;
 };

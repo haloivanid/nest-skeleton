@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { UserAuthStrategy } from '@libs/core/auth/startegy/user';
+import { UserAuthStrategy } from '@libs/core/auth/strategy/user';
 import { JwtModule } from '@nestjs/jwt';
 import { UserRepositoryModule } from '@module/users/repository';
 import { UserEmailMapper, UserMapper } from '@module/users/mapper';

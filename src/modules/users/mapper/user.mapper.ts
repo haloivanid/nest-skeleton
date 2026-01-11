@@ -2,14 +2,15 @@ import { Injectable } from '@nestjs/common';
 import { User, UserEntity } from '@module/users/domain';
 import { UsersTypeormEntity } from '@db/entities';
 import { UserResponseDto } from '@module/users/dto/responses/user-response.dto';
-import { DeepConverter } from '@libs/utils/deep-converter';
 import { UserEmailMapper } from './user-email.mapper';
+import { DomainMapperBase } from '@libs/core/domain';
+import { toTitleCase } from '@libs/utils';
 
 @Injectable()
-export class UserMapper {
+export class UserMapper implements DomainMapperBase<User, UsersTypeormEntity> {
   constructor(private readonly userEmailMapper: UserEmailMapper) {}
 
-  fromDomainToRepositoryEntity(domain: User): UsersTypeormEntity {
+  fromDomainToRepository(domain: User): UsersTypeormEntity {
     const user = domain.toObject();
     const entity = new UsersTypeormEntity();
 
@@ -35,7 +36,7 @@ export class UserMapper {
   }
 
   fromRepositoryToDomain(repo: UsersTypeormEntity): User {
-    return User.create({
+    return new User({
       id: repo.id,
       createdAt: repo.createdAt,
       updatedAt: repo.updatedAt,
@@ -49,8 +50,13 @@ export class UserMapper {
   }
 
   fromRepositoryToResponse(repo: UsersTypeormEntity): UserResponseDto {
-    return DeepConverter.withFactory<UsersTypeormEntity, UserResponseDto>({
-      options: { autoClone: false, autoFromSameName: true },
-    }).convert(repo);
+    return {
+      id: repo.id,
+      name: toTitleCase(repo.name),
+      email: this.userEmailMapper.fromRepositoryEntityToResponseUnMask(repo.email),
+      deletedAt: repo.deletedAt,
+      createdAt: repo.createdAt,
+      updatedAt: repo.updatedAt,
+    };
   }
 }

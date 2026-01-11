@@ -1,15 +1,16 @@
-import { IQueryHandler, QueryBus, QueryHandler } from '@nestjs/cqrs';
+import { ICommandHandler, QueryBus, CommandHandler } from '@nestjs/cqrs';
 import { UserRepository } from '@module/users/repository';
 import { UserEmailMapper, UserMapper } from '@module/users/mapper';
 import { Inject, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { CACHE_MANAGER, Cache } from '@nestjs/cache-manager';
 import { CryptService } from '@libs/core/providers/crypt';
-import { UserLoginQuery, UserPasswordAttemptQuery } from '@module/users/services/query';
-import { UserAuthStrategyDto } from '@libs/core/auth/startegy/user/user.auth-strategy.dto';
+import { UserAuthStrategyDto } from '@libs/core/auth/strategy/user/user.auth-strategy.dto';
+import { UserLoginCommand } from '@module/users/services/command';
+import { UserPasswordAttemptQuery } from '../query';
 
-@QueryHandler(UserLoginQuery)
-export class UserLoginUseCase implements IQueryHandler<UserLoginQuery> {
+@CommandHandler(UserLoginCommand)
+export class UserLoginUseCase implements ICommandHandler<UserLoginCommand> {
   private readonly CACHE_KEY_PREFIX = 'auth-login';
 
   constructor(
@@ -22,7 +23,7 @@ export class UserLoginUseCase implements IQueryHandler<UserLoginQuery> {
     private readonly cryptService: CryptService,
   ) {}
 
-  async execute(query: UserLoginQuery) {
+  async execute(query: UserLoginCommand) {
     const key = this.generateCacheKey(query.dto.email);
     let accessToken = await this.cacheManager.get<string>(key);
     if (accessToken) {

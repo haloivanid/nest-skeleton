@@ -1,4 +1,5 @@
 export * from './base/aggregate-root.base';
+export * from './base/domain-mapper.base';
 export * from './base/entity.base';
 export * from './base/vo.base';
 

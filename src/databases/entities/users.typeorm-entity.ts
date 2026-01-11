@@ -6,7 +6,7 @@ import { EmailEmbed } from '@db/embed/email.embed';
 @Index(['email.lookup'], { unique: true })
 @Index(['deletedAt'], { where: 'deleted_at IS NOT NULL' })
 export class UsersTypeormEntity extends BaseTypeormEntity {
-  readonly sortable: (keyof this)[] = ['name', 'createdAt'];
+  readonly sortable: (keyof UsersTypeormEntity)[] = ['name', 'createdAt'];
 
   @PrimaryColumn()
   id: string;
