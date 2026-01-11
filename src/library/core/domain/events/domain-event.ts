@@ -1,4 +1,4 @@
-import { DomainEventMetadata } from '@libs/core/domain';
+import { DomainEventFields, DomainEventMetadata } from '@libs/core/domain';
 import { systemId } from '@libs/utils/uid';
 import { time } from '@libs/utils/time';
 
@@ -6,7 +6,12 @@ import { time } from '@libs/utils/time';
  * Base class for all domain events.
  * Domain events represent something that happened in the domain that domain experts care about.
  */
-export abstract class DomainEvent {
+export abstract class DomainEvent<
+  T extends { aggregateId: string; metadata: DomainEventMetadata } = {
+    aggregateId: string;
+    metadata: DomainEventMetadata;
+  },
+> {
   /** Unique identifier for this event */
   readonly id: string;
 
@@ -20,10 +25,7 @@ export abstract class DomainEvent {
    * Creates a new domain event
    * @param fields The fields required to create the event
    */
-  protected constructor(fields: {
-    aggregateId: string;
-    metadata: { correlationId: string; causationId?: string; userId?: string; occurredAt?: number };
-  }) {
+  protected constructor(fields: DomainEventFields<T>) {
     this.id = systemId();
     this.aggregateId = fields.aggregateId;
     this.metadata = {
@@ -32,19 +34,5 @@ export abstract class DomainEvent {
       userId: fields.metadata?.userId,
       occurredAt: fields.metadata?.occurredAt || time().unix(),
     };
-  }
-
-  /**
-   * Returns the name of this event (the class name)
-   */
-  get eventName(): string {
-    return this.constructor.name;
-  }
-
-  /**
-   * Returns the event ID (same as id, but more explicit for logging)
-   */
-  get eventId(): string {
-    return this.id;
   }
 }

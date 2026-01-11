@@ -10,7 +10,9 @@ import { createTypeOrmConfig } from '@conf/typeorm/typeorm.config';
 import { ControllerModule } from './controllers/controller.module';
 import { CqrsModule } from '@nestjs/cqrs';
 import { AuthModule } from '@libs/core/auth';
-import { validateEnv } from '@conf/env/env.validation';
+import { validateEnv } from '@conf/env';
+import { ExternalMailerModule } from '@ext/mailer';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 
 @Module({
   imports: [
@@ -18,6 +20,8 @@ import { validateEnv } from '@conf/env/env.validation';
     AppCtxModule.register(),
     TypeOrmModule.forRootAsync({ useFactory: () => createTypeOrmConfig(process.env) }),
     CqrsModule.forRoot(),
+    EventEmitterModule.forRoot(),
+    ExternalMailerModule,
     AuthModule,
     ControllerModule,
     UserModule,

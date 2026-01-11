@@ -1,9 +1,7 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { CreateUserCommand } from '@module/users/services/command/create-user.command';
-import { User, UserEmailValueObject, UserEntityCreationPayload } from '@module/users/domain';
-import { entityId } from '@libs/utils/uid';
+import { User, UserEmailValueObject, UserEntityFields } from '@module/users/domain';
 import { UserRepository } from '@module/users/repository';
-import { UsersTypeormEntity } from '@db/entities/users.typeorm-entity';
 import { UserEmailMapper, UserMapper } from '@module/users/mapper';
 import { UnauthorizedException } from '@nestjs/common';
 import { CryptService } from '@libs/core/providers/crypt';
@@ -24,21 +22,19 @@ export class CreateUserUseCase implements ICommandHandler<CreateUserCommand> {
       throw new UnauthorizedException('User already exists');
     }
 
+    const userName = command.dto.name.trim().toLowerCase();
     const userEmail = UserEmailValueObject.create(command.dto.email);
-    const payload: UserEntityCreationPayload = {
-      id: entityId(),
-      fields: {
-        name: command.dto.name,
-        email: userEmail,
-        password: await this.crypt.toHash(command.dto.password),
-        deletedAt: null,
-      },
+    const payload: UserEntityFields = {
+      name: userName,
+      email: userEmail,
+      password: await this.crypt.toHash(command.dto.password),
+      deletedAt: null,
     };
 
-    const user = User.create(payload);
+    const user = User.register(payload);
 
-    await this.userRepository.save<UsersTypeormEntity>(this.userMapper.fromDomainToRepositoryEntity(user));
+    const savedUser = await this.userRepository.writeDomainToRepository(user);
 
-    return this.userMapper.fromDomainToResponse(user);
+    return this.userMapper.fromRepositoryToResponse(savedUser);
   }
 }

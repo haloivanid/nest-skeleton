@@ -34,7 +34,9 @@
       "@conf/*": ["./src/configs/*"],
       "@libs/*": ["./src/library/*"],
       "@module/*": ["./src/modules/*"],
-      "@db/*": ["./src/databases/*"]
+      "@db/*": ["./src/databases/*"],
+      "@ext/*": ["./src/external/*"],
+      "@view/*": ["./view/*"]
     }
   },
   "include": ["./src/**/*.ts", "./src/**/*.d.ts", "./view/**/*.tsx"]

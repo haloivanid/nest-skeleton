@@ -1,2 +1,2 @@
 export * from './auth.module';
-export * from './startegy/user/user.auth-strategy';
+export * from './strategy/user/user.auth-strategy';

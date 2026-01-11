@@ -1,6 +1,6 @@
 import { DataSourceOptions } from 'typeorm';
 import { join } from 'node:path';
-import { TypeormNamingStrategy } from '../../library/utils/typeorm/typeorm-naming-strategy';
+import { TypeormNamingStrategy } from '../../library/external/typeorm/typeorm-naming-strategy';
 import { envSchema } from '../env/env.schema';
 
 export function createTypeOrmConfig(env: Record<string, unknown>): DataSourceOptions {

@@ -2,7 +2,11 @@ import { z } from 'zod';
 
 export const CreateUserDtoSchema = z
   .object({
-    name: z.string(),
+    name: z
+      .string()
+      .trim()
+      .min(5, 'Full name must be at least 5 characters long')
+      .regex(/^[A-Za-z]+(?:\s+[A-Za-z]+)+$/, 'Please enter your full name (first and last)'),
     email: z.email(),
     password: z.string().superRefine((val, ctx) => {
       if (val.length < 8) ctx.addIssue({ code: 'custom', message: 'Min length 8.' });

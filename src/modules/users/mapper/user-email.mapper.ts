@@ -28,6 +28,10 @@ export class UserEmailMapper {
     return UserEmailValueObject.create(this.crypt.fromCipherData(embed.blob));
   }
 
+  fromRepositoryEntityToResponseUnMask(embed: EmailEmbed): string {
+    return this.crypt.fromCipherData(embed.blob);
+  }
+
   fromDomainToResponse(domain: UserEmailValueObject): string {
     return this.toMask(domain.unpack() as string);
   }

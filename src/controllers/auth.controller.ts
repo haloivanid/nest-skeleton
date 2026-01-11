@@ -1,18 +1,14 @@
 import { Body, Controller, HttpStatus, Post } from '@nestjs/common';
-import { CommandBus, QueryBus } from '@nestjs/cqrs';
+import { CommandBus } from '@nestjs/cqrs';
 import { CreateUserDtoSchema } from '@module/users/dto';
 import { ControllerResult } from '@libs/core/dto';
-import { CreateUserCommand } from '@module/users/services/command';
+import { CreateUserCommand, UserLoginCommand } from '@module/users/services/command';
 import { requestDtoValidator } from '@libs/utils/zod';
 import { UserLoginDtoSchema } from '@module/users/dto/requests/user-login.dto';
-import { UserLoginQuery } from '@module/users/services/query';
 
 @Controller('/auth')
 export class AuthController {
-  constructor(
-    private readonly commandBus: CommandBus,
-    private readonly queryBus: QueryBus,
-  ) {}
+  constructor(private readonly commandBus: CommandBus) {}
 
   @Post('/register')
   async register(@Body() body: Record<string, any>) {
@@ -26,7 +22,7 @@ export class AuthController {
   @Post('/login')
   async login(@Body() body: Record<string, any>) {
     const requestBody = requestDtoValidator(body, UserLoginDtoSchema);
-    const result = await this.queryBus.execute(new UserLoginQuery(requestBody));
+    const result = await this.commandBus.execute(new UserLoginCommand(requestBody));
 
     return ControllerResult.builder(result, result.cached ? HttpStatus.NOT_MODIFIED : HttpStatus.OK);
   }

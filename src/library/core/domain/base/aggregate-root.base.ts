@@ -24,8 +24,8 @@ export abstract class AggregateRoot {
    * @param event The domain event to add
    */
   protected addEvent(event: DomainEvent): void {
-    if (!this._events.has(event.eventId)) {
-      this._events.set(event.eventId, event);
+    if (!this._events.has(event.id)) {
+      this._events.set(event.id, event);
     }
   }
 
@@ -84,7 +84,7 @@ export abstract class AggregateRoot {
     const start = time().unix();
     const eventName = event.constructor.name;
     const aggregateId = this._id;
-    const eventId = event.eventId;
+    const eventId = event.id;
 
     const log: DomainEventLog = {
       eventId,

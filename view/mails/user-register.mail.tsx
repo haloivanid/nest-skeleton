@@ -1,64 +1,51 @@
 import * as React from 'react';
-import {
-  Body,
-  Column,
-  Container,
-  Head,
-  Html,
-  Link,
-  Preview,
-  Row,
-  Section,
-  Tailwind,
-  Text,
-} from '@react-email/components';
+import { Body, Container, Head, Heading, Hr, Html, Link, Section, Tailwind, Text } from '@react-email/components';
 
 interface UserRegisterEmailProps {
-  code: string;
-  date: string;
+  name: string;
 }
 
-export const UserRegisterEmail = ({ code, date }: UserRegisterEmailProps) => {
+export const UserRegisterEmail = ({ name }: UserRegisterEmailProps): React.ReactNode => {
   return (
-    <Html>
+    <Html lang="en">
       <Head />
       <Tailwind>
-        <Body className="bg-[#efeef1]">
-          <Preview>You updated the password for your account</Preview>
-          <Container className="max-w-[580px] my-[30px] mx-auto bg-white">
-            <Section className="w-full">
-              <Row>
-                <Column className="[border-bottom:1px_solid_rgb(238,238,238)] w-[249px]" />
-                <Column className="[border-bottom:1px_solid_rgb(145,71,255)] w-[102px]" />
-                <Column className="[border-bottom:1px_solid_rgb(238,238,238)] w-[249px]" />
-              </Row>
+        <Body className="bg-[#f4f4f5] font-sans">
+          <Container className="max-w-[480px] my-10 mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
+            {/* Header with gradient */}
+            <Section className="bg-gradient-to-r from-[#6366f1] to-[#8b5cf6] px-8 py-10 text-center">
+              <Text className="text-[48px] m-0">✓</Text>
+              <Heading className="text-white text-[24px] font-bold m-0 mt-2">Registration Confirmed!</Heading>
             </Section>
-            <Section className="pt-[5px] px-5 pb-[10px]">
-              <Text className="text-[14px] leading-[1.5]">Hi,</Text>
-              <Text className="text-[14px] leading-[1.5]">
-                You registered on our service on {date}. If this was you, then no further action is required.
+
+            {/* Content */}
+            <Section className="px-8 py-8">
+              <Text className="text-[#374151] text-[16px] leading-[1.6] m-0">
+                Hello <strong>{name}</strong>,
               </Text>
-              <Text className="text-[14px] leading-[1.5]">Here your OTP code {code}</Text>
-              <Text className="text-[14px] leading-[1.5]">However if you did NOT perform this, skip this email.</Text>
-              <Text className="text-[14px] leading-[1.5]">
-                Still have questions? Please contact{' '}
-                <Link href="#" className="underline">
-                  Our Support
+              <Text className="text-[#374151] text-[16px] leading-[1.6] mt-4">
+                Welcome aboard! Your account has been successfully created. We&apos;re excited to have you with us.
+              </Text>
+              <Text className="text-[#374151] text-[16px] leading-[1.6] mt-4">
+                You can now log in and start exploring all the features we have to offer.
+              </Text>
+
+              <Hr className="border-[#e5e7eb] my-6" />
+
+              <Text className="text-[#6b7280] text-[14px] leading-[1.6] m-0">
+                If you didn&apos;t create this account, please ignore this email or{' '}
+                <Link href="#" className="text-[#6366f1] underline">
+                  contact our support
                 </Link>
+                .
               </Text>
-              <Text className="text-[14px] leading-[1.5]">
-                Thanks,
-                <br />
-                Ivan Azis
-              </Text>
+            </Section>
+
+            {/* Footer */}
+            <Section className="bg-[#f9fafb] px-8 py-6 text-center">
+              <Text className="text-[#9ca3af] text-[12px] m-0">© 2026 Your Company. All rights reserved.</Text>
             </Section>
           </Container>
-
-          <Section className="max-w-[580px] mx-auto">
-            <Row>
-              <Text className="text-center text-[#706a7b]">© 2026 Ivan, All Rights Reserved</Text>
-            </Row>
-          </Section>
         </Body>
       </Tailwind>
     </Html>

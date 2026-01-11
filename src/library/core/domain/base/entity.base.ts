@@ -39,7 +39,7 @@ export abstract class Entity<
    * @param payload - The payload containing entity data
    * @throws {Error} If the payload is empty or invalid
    */
-  protected constructor(payload: TCreationPayload) {
+  constructor(payload: TCreationPayload) {
     if (isEmpty(payload)) {
       throw new Error('Entity creation payload cannot be empty');
     }
