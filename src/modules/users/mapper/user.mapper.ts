@@ -4,7 +4,6 @@ import { UsersTypeormEntity } from '@db/entities';
 import { UserResponseDto } from '@module/users/dto/responses/user-response.dto';
 import { UserEmailMapper } from './user-email.mapper';
 import { DomainMapperBase } from '@libs/core/domain';
-import { toTitleCase } from '@libs/utils';
 
 @Injectable()
 export class UserMapper implements DomainMapperBase<User, UsersTypeormEntity> {
@@ -52,7 +51,7 @@ export class UserMapper implements DomainMapperBase<User, UsersTypeormEntity> {
   fromRepositoryToResponse(repo: UsersTypeormEntity): UserResponseDto {
     return {
       id: repo.id,
-      name: toTitleCase(repo.name),
+      name: repo.name,
       email: this.userEmailMapper.fromRepositoryEntityToResponseUnMask(repo.email),
       deletedAt: repo.deletedAt,
       createdAt: repo.createdAt,

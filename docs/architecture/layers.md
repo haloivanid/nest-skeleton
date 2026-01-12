@@ -168,12 +168,16 @@ src/modules/users/
 │   └── user-repository.module.ts
 ├── services/                  # Application services
 │   ├── command/               # Write operations
-│   │   └── create-user.command.ts
+│   │   ├── create-user.command.ts
+│   │   ├── user-login.command.ts  # Login is a write op (side effects)
+│   │   └── index.ts
 │   ├── query/                 # Read operations
-│   │   └── user-login.query.ts
+│   │   ├── get-user.query.ts
+│   │   └── index.ts
 │   └── usecase/               # Command/query handlers
 │       ├── create-user.use-case.ts
-│       └── user-login.use-case.ts
+│       ├── user-login.use-case.ts
+│       └── index.ts
 ├── mapper/                    # Transform between layers
 │   └── user.mapper.ts
 └── user.module.ts             # Module registration
@@ -198,7 +202,7 @@ export class UserController {
 
   @Post('login')
   async login(@Body() dto: UserLoginDto) {
-    return this.queryBus.execute(new UserLoginQuery(dto));
+    return this.commandBus.execute(new UserLoginCommand(dto));
   }
 }
 ```

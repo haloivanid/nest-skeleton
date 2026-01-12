@@ -4,7 +4,7 @@ import { z } from 'zod';
 import { UserEmailValueObject } from '@module/users/domain/user-email.vo';
 import { entityId } from '@libs/utils/uid';
 import { UserRegisteredDomainEvent } from './event/user-registered.domain-event';
-import { time } from '@libs/utils';
+import { time, toTitleCase } from '@libs/utils';
 
 export class User extends Entity<UserEntityFields, UserEntityCreationPayload> {
   declare protected _id: string;
@@ -21,6 +21,7 @@ export class User extends Entity<UserEntityFields, UserEntityCreationPayload> {
   }
 
   static register(fields: UserEntityFields) {
+    fields.name = toTitleCase(fields.name.trim().toLowerCase());
     const entity = new User({ id: entityId(), fields });
 
     entity.addEvent(

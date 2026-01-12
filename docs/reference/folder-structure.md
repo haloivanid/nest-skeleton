@@ -43,6 +43,7 @@ src/
 ├── configs/          # Configuration files
 ├── controllers/      # Global controllers
 ├── databases/        # Database layer
+├── external/         # External services integration
 ├── library/          # Shared code
 ├── modules/          # Feature modules
 ├── types/            # Global type definitions
@@ -116,6 +117,21 @@ databases/
 
 ---
 
+### `src/external/`
+
+Integrations with external 3rd-party services:
+
+```
+external/
+├── mailer/           # Email service integration
+│   ├── index.ts
+│   └── external-mailer.module.ts
+```
+
+**Purpose**: Encapsulate logic for interacting with outside systems (Stripe, SendGrid, etc.).
+
+---
+
 ### `src/library/`
 
 Shared code used across modules:
@@ -143,6 +159,9 @@ library/
 ├── enum/
 │   ├── requested-lang.enum.ts
 │   └── sort-direction.enum.ts
+├── external/          # Adapters for external libraries
+│   ├── mailer/
+│   └── typeorm/
 ├── types/
 │   ├── multi-lang.types.ts
 │   └── sorting-field.types.ts
