@@ -214,72 +214,64 @@ A query represents a **request for information** without changing state.
 
 ```typescript
 // 1. Query class (describes what to fetch)
-export class UserLoginQuery {
-  constructor(public readonly dto: UserLoginDto) {}
+export class GetUserQuery {
+  constructor(public readonly userId: string) {}
 }
 
 // 2. Query handler (fetches the data)
-@QueryHandler(UserLoginQuery)
-export class UserLoginUseCase implements IQueryHandler<UserLoginQuery> {
+@QueryHandler(GetUserQuery)
+export class GetUserUseCase implements IQueryHandler<GetUserQuery> {
   constructor(
     private readonly userRepository: UserRepository,
-    private readonly crypt: CryptService,
-    private readonly jwtService: JwtService,
+    private readonly cache: Cache,
   ) {}
 
-  async execute(query: UserLoginQuery): Promise<UserLoginResponseDto> {
+  async execute(query: GetUserQuery): Promise<UserResponseDto> {
     // Fetch and return data
   }
 }
 ```
 
-### Real Example: UserLoginQuery
+### Real Example: GetUserQuery
 
-**File**: `src/modules/users/services/query/user-login.query.ts`
+**File**: `src/modules/users/services/query/get-user.query.ts`
 
 ```typescript
-import { UserLoginDto } from '@module/users/dto/requests/user-login.dto';
-
-export class UserLoginQuery {
-  constructor(public readonly dto: UserLoginDto) {}
+export class GetUserQuery {
+  constructor(public readonly userId: string) {}
 }
 ```
 
-**File**: `src/modules/users/services/usecase/user-login.use-case.ts`
+**File**: `src/modules/users/services/usecase/get-user.use-case.ts`
 
 ```typescript
-@QueryHandler(UserLoginQuery)
-export class UserLoginUseCase implements IQueryHandler<UserLoginQuery, UserLoginResponseDto> {
+@QueryHandler(GetUserQuery)
+export class GetUserUseCase implements IQueryHandler<GetUserQuery, UserResponseDto> {
   constructor(
     private readonly userRepository: UserRepository,
-    private readonly userEmailMapper: UserEmailMapper,
-    private readonly crypt: CryptService,
-    private readonly jwtService: JwtService,
-    private readonly cacheManager: Cache,
+    private readonly userMapper: UserMapper,
+    @Inject(CACHE_MANAGER) private readonly cache: Cache,
   ) {}
 
-  async execute(query: UserLoginQuery): Promise<UserLoginResponseDto> {
-    // 1. Find user by email
-    const lookupEmail = this.userEmailMapper.fromRequestToLookup(query.dto.email);
-    const user = await this.userRepository.findOneByEmail(lookupEmail);
+  async execute(query: GetUserQuery): Promise<UserResponseDto> {
+    const cacheKey = `user:${query.userId}`;
 
+    // 1. Check cache
+    const cached = await this.cache.get<UserResponseDto>(cacheKey);
+    if (cached) return cached;
+
+    // 2. Fetch from DB
+    const user = await this.userRepository.findById(query.userId);
     if (!user) {
-      throw new UnauthorizedException('Invalid credentials');
+      throw new NotFoundException('User not found');
     }
 
-    // 2. Verify password
-    const isValidPassword = await this.crypt.compare(query.dto.password, user.password);
+    // 3. Transform
+    const response = this.userMapper.fromDomainToResponse(user);
 
-    if (!isValidPassword) {
-      throw new UnauthorizedException('Invalid credentials');
-    }
-
-    // 3. Generate JWT token
-    const payload = { id: user.id };
-    const token = this.jwtService.sign(payload);
-
-    // 4. Return response
-    return { token, user: { id: user.id, name: user.name, email: user.email.email } };
+    // 4. Cache and return
+    await this.cache.set(cacheKey, response, 300 * 1000); // 5 mins
+    return response;
   }
 }
 ```
@@ -291,11 +283,10 @@ export class UserLoginUseCase implements IQueryHandler<UserLoginQuery, UserLogin
 export class UserController {
   constructor(private readonly queryBus: QueryBus) {}
 
-  @Post('login')
-  @HttpCode(200) // Login is a POST but returns data
-  async login(@Body() dto: UserLoginDto) {
+  @Get(':id')
+  async getUser(@Param('id') id: string) {
     // Dispatch query to the bus
-    return this.queryBus.execute(new UserLoginQuery(dto));
+    return this.queryBus.execute(new GetUserQuery(id));
   }
 }
 ```

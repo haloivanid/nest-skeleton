@@ -44,8 +44,6 @@ export class CryptService {
       throw new Error('Input exceeds maximum allowed length');
     }
 
-    value = value.trim().toLowerCase();
-
     return createHmac('sha256', this.getHmacKey()).update(value).digest();
   }
 
@@ -53,8 +51,6 @@ export class CryptService {
     if (value.length > this.MAX_INPUT_LENGTH) {
       throw new Error('Input exceeds maximum allowed length');
     }
-
-    value = value.trim().toLowerCase();
 
     const iv = randomBytes(this.IV_LEN);
     const cipher = createCipheriv(this.IV_ALG, this.getPiiKey(), iv, { authTagLength: this.IV_TAG_LEN });

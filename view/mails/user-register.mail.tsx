@@ -11,10 +11,10 @@ export const UserRegisterEmail = ({ name }: UserRegisterEmailProps): React.React
       <Head />
       <Tailwind>
         <Body className="bg-[#f4f4f5] font-sans">
-          <Container className="max-w-[480px] my-10 mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
-            {/* Header with gradient */}
-            <Section className="bg-gradient-to-r from-[#6366f1] to-[#8b5cf6] px-8 py-10 text-center">
-              <Text className="text-[48px] m-0">✓</Text>
+          <Container className="max-w-[480px] my-10 mx-auto bg-white rounded-xl border border-[#e5e7eb] overflow-hidden">
+            {/* Header with solid color */}
+            <Section className="bg-[#6366f1] px-8 py-10 text-center">
+              <Text className="text-white text-[48px] m-0">✓</Text>
               <Heading className="text-white text-[24px] font-bold m-0 mt-2">Registration Confirmed!</Heading>
             </Section>
 

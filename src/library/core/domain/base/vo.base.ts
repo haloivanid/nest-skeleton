@@ -1,12 +1,14 @@
-import { ObjectPrimitive, ValueObjectField } from '@libs/core/domain/types';
+import { ObjectPrimitive, ValueObjectField, ValueObjectFieldSchema } from '@libs/core/domain/types';
 import { isEmpty } from '@libs/utils';
 
 export abstract class ValueObject<T> {
   protected readonly field: ValueObjectField<T>;
 
+  abstract getObjectFieldsSchema(): ValueObjectFieldSchema<ValueObjectField<T>>;
+
   constructor(value: ValueObjectField<T>) {
     if (isEmpty(value)) throw new Error('ValueObject is empty');
-    this.field = value;
+    this.field = this.prepareFields(value);
   }
 
   equals(value: ValueObject<T>) {
@@ -25,5 +27,16 @@ export abstract class ValueObject<T> {
 
   private isObjectPrimitive<T extends Primitive | Date>(obj: unknown): obj is ObjectPrimitive<T> {
     return !!Object.hasOwn(obj as object, 'value');
+  }
+
+  private prepareFields(fields: unknown): ValueObjectField<T> {
+    const schema = this.getObjectFieldsSchema();
+    const result = schema.safeParse(fields);
+
+    if (!result.success) {
+      throw new Error(`Invalid object fields: ${result.error.message}`);
+    }
+
+    return result.data;
   }
 }

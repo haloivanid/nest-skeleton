@@ -187,6 +187,7 @@ curl -X POST http://localhost:3000/users/login \
 - **Architecture**: [docs/architecture/overview.md](docs/architecture/overview.md)
 - **App Context**: [docs/architecture/app-context.md](docs/architecture/app-context.md)
 - **CQRS Pattern**: [docs/guides/cqrs-pattern.md](docs/guides/cqrs-pattern.md)
+- **Event-Driven Architecture**: [docs/architecture/events.md](docs/architecture/events.md)
 - **All Documentation**: [docs/README.md](docs/README.md)
 
 ---

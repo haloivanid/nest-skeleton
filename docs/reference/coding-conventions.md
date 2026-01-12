@@ -6,25 +6,27 @@ This document outlines the naming conventions, file structure rules, and coding 
 
 ### Suffix Meanings
 
-| Suffix                | Purpose                          | Example                   | Layer          |
-| --------------------- | -------------------------------- | ------------------------- | -------------- |
-| `.entity.ts`          | Domain entities (business logic) | `user.entity.ts`          | Domain         |
-| `.typeorm-entity.ts`  | Database entities (TypeORM)      | `users.typeorm-entity.ts` | Infrastructure |
-| `.vo.ts`              | Value objects                    | `user-email.vo.ts`        | Domain         |
-| `.dto.ts`             | Data transfer objects            | `create-user.dto.ts`      | Module         |
-| `.mapper.ts`          | Transformations between layers   | `user.mapper.ts`          | Module         |
-| `.command.ts`         | CQRS commands (write operations) | `create-user.command.ts`  | Module         |
-| `.query.ts`           | CQRS queries (read operations)   | `user-login.query.ts`     | Module         |
-| `.use-case.ts`        | Command/query handlers           | `create-user.use-case.ts` | Module         |
-| `.module.ts`          | NestJS modules                   | `user.module.ts`          | Module         |
-| `.controller.ts`      | HTTP controllers                 | `user.controller.ts`      | Module         |
-| `.service.ts`         | General services                 | `crypt.service.ts`        | Library        |
-| `.repository.ts`      | Repository abstractions          | `user.repository.ts`      | Module         |
-| `.typeorm-adapter.ts` | Repository implementations       | `user.typeorm-adapter.ts` | Infrastructure |
-| `.config.ts`          | Configuration files              | `typeorm.config.ts`       | Config         |
-| `.types.ts`           | Type definitions                 | `user-entity.types.ts`    | Any            |
-| `.enum.ts`            | Enumerations                     | `user-status.enum.ts`     | Any            |
-| `.util.ts`            | Utility functions                | `time.util.ts`            | Library        |
+| Suffix                | Purpose                          | Example                           | Layer          |
+| --------------------- | -------------------------------- | --------------------------------- | -------------- |
+| `.entity.ts`          | Domain entities (business logic) | `user.entity.ts`                  | Domain         |
+| `.typeorm-entity.ts`  | Database entities (TypeORM)      | `users.typeorm-entity.ts`         | Infrastructure |
+| `.vo.ts`              | Value objects                    | `user-email.vo.ts`                | Domain         |
+| `.dto.ts`             | Data transfer objects            | `create-user.dto.ts`              | Module         |
+| `.mapper.ts`          | Transformations between layers   | `user.mapper.ts`                  | Module         |
+| `.command.ts`         | CQRS commands (write operations) | `create-user.command.ts`          | Module         |
+| `.query.ts`           | CQRS queries (read operations)   | `user-login.query.ts`             | Module         |
+| `.use-case.ts`        | Command/query handlers           | `create-user.use-case.ts`         | Module         |
+| `.module.ts`          | NestJS modules                   | `user.module.ts`                  | Module         |
+| `.controller.ts`      | HTTP controllers                 | `user.controller.ts`              | Module         |
+| `.service.ts`         | General services                 | `crypt.service.ts`                | Library        |
+| `.repository.ts`      | Repository abstractions          | `user.repository.ts`              | Module         |
+| `.typeorm-adapter.ts` | Repository implementations       | `user.typeorm-adapter.ts`         | Infrastructure |
+| `.config.ts`          | Configuration files              | `typeorm.config.ts`               | Config         |
+| `.types.ts`           | Type definitions                 | `user-entity.types.ts`            | Any            |
+| `.enum.ts`            | Enumerations                     | `user-status.enum.ts`             | Any            |
+| `.domain-event.ts`    | Domain events                    | `user-registered.domain-event.ts` | Domain         |
+| `.event-handler.ts`   | Event listeners                  | `user-register.event-handler.ts`  | External       |
+| `.util.ts`            | Utility functions                | `string.util.ts`                  | Library        |
 
 ### Naming Rules
 

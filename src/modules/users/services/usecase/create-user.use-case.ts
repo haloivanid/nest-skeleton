@@ -22,7 +22,7 @@ export class CreateUserUseCase implements ICommandHandler<CreateUserCommand> {
       throw new UnauthorizedException('User already exists');
     }
 
-    const userName = command.dto.name.trim().toLowerCase();
+    const userName = command.dto.name;
     const userEmail = UserEmailValueObject.create(command.dto.email);
     const payload: UserEntityFields = {
       name: userName,

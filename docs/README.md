@@ -37,6 +37,7 @@ Understanding how the application is structured:
 - **[Architecture Overview](architecture/overview.md)** - High-level architecture explanation
 - **[Layer Breakdown](architecture/layers.md)** - Detailed layer responsibilities
 - **[Data Flow](architecture/data-flow.md)** - Request/response flow through the system
+- **[Event-Driven Architecture](architecture/events.md)** - Handling side effects with events
 
 ### Guides
 
