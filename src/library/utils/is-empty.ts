@@ -21,7 +21,7 @@ export function isEmpty(value: any) {
 
   if (typeof value === 'object') {
     for (const key in value) {
-      if (Object.prototype.hasOwnProperty.call(value, key)) return false;
+      if (Object.hasOwn(value, key)) return false;
     }
     return true;
   }
