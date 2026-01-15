@@ -7,7 +7,7 @@ import prettier from 'eslint-config-prettier';
 import pluginReact from 'eslint-plugin-react';
 
 export default defineConfig([
-  { ignores: ['eslint.config.mjs'] },
+  { ignores: ['eslint.config.mjs', './.scripts'] },
   ...tsEslint.configs.recommendedTypeChecked,
   prettier,
   { files: ['**/*.{js,mjs,cjs}'], plugins: { js }, extends: ['js/recommended'] },
