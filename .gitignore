@@ -66,8 +66,6 @@ web_modules/
 .yarn-integrity
 
 # dotenv environment variable files
-.env
-.env.*
 !.env.example
 
 # parcel-bundler cache (https://parceljs.org/)
@@ -144,4 +142,4 @@ vite.config.ts.timestamp-*
 .idea
 
 # vscode
-.vscode
+config.bat
